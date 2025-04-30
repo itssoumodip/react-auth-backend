@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { FiMail, FiLock, FiUser, FiAlertCircle, FiCheckCircle } from "react-icons/fi";
+import API_BASE_URL from '../config/api';
 
 function Signup({ switchPage }) {
     const [formData, setFormData] = useState({
@@ -78,7 +79,7 @@ function Signup({ switchPage }) {
         setIsSubmitting(true);
         
         try {
-            const result = await axios.post('http://localhost:3001/register', { 
+            const result = await axios.post(`${API_BASE_URL}/register`, { 
                 name: `${formData.firstName} ${formData.lastName}`, 
                 email: formData.email, 
                 password: formData.password 

@@ -3,19 +3,17 @@ const connectToMongodb = require('./db');
 const User = require('./modules/user');
 const {body, validationResult} = require('express-validator');
 const b = require('bcryptjs');
-
 const cors = require('cors');
-
 const jwt = require('jsonwebtoken');
 const jwt_str = 'React JS';
 const ejs = require('ejs');
-
+require('dotenv').config();
 
 connectToMongodb();
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 9999; 
 
-app.use (cors({origin: 'http://localhost:3000'})); // Allow requests from this origin
+app.use (cors({origin: 'http://localhost:3000'})); 
 
 app.use(express.json());
 app.set('view engine', 'ejs');
@@ -181,7 +179,7 @@ app.post('/forgot-password', async (req, res) => {
             { expiresIn: '5m' }
         );
     
-        const link = `http://localhost:3001/reset-password/${oldUser._id}/${token}`;
+        const link = `http://localhost:${port}/reset-password/${oldUser._id}/${token}`;
         console.log("Reset link generated:", link);
         
         // In a production app, you would send an email here

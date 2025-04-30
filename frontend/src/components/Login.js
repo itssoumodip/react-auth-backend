@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { FiMail, FiLock, FiUser, FiAlertCircle, FiEye, FiEyeOff } from 'react-icons/fi';
+import API_BASE_URL from '../config/api';
 
 const Login = ({ onForgotPassword, switchPage }) => {
   const [formData, setFormData] = useState({
@@ -41,7 +42,7 @@ const Login = ({ onForgotPassword, switchPage }) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3001/login", 
+        `${API_BASE_URL}/login`, 
         { 
           email: formData.email, 
           password: formData.password 

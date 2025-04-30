@@ -6,6 +6,7 @@ import {
 } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import API_BASE_URL from '../config/api';
 
 function Home() {
     const [data, setData] = useState([]);
@@ -20,7 +21,7 @@ function Home() {
 
     useEffect(() => {
         setIsLoading(true);
-        fetch("http://localhost:3001/fetch-details", {
+        fetch(`${API_BASE_URL}/fetch-details`, {
             method: 'GET'
         })
         .then((res) => res.json())
@@ -39,7 +40,7 @@ function Home() {
     const deleteUser = (id, name) => {
         console.log('Deleting the user with id:', id);
         if (window.confirm(`Are you sure you want to delete ${name}?`)) {
-            axios.post('http://localhost:3001/delete-user', {id})
+            axios.post(`${API_BASE_URL}/delete-user`, {id})
             .then((res) => {
                 if (res.data.message === 'User Deleted Successfully') {
                     setData(prevData => prevData.filter(user => user._id !== id));
@@ -83,7 +84,7 @@ function Home() {
             updatedData.password = editUserPassword;
         }
         
-        axios.post('http://localhost:3001/update-user', { id: editingUserId, ...updatedData })
+        axios.post(`${API_BASE_URL}/update-user`, { id: editingUserId, ...updatedData })
         .then(response => {
             if(response.data.message === 'updated') {
                 toast.success('User updated successfully');
