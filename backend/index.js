@@ -13,7 +13,10 @@ connectToMongodb();
 const app = express();
 const port = process.env.PORT || 9999; 
 
-app.use (cors({origin: 'http://localhost:3000'})); 
+// Update CORS to allow requests from your Vercel frontend
+app.use(cors({
+  origin: ['http://localhost:3000', 'https://react-auth-backend.vercel.app', 'https://react-auth-backend-deploy.vercel.app']
+}));
 
 app.use(express.json());
 app.set('view engine', 'ejs');
@@ -179,7 +182,9 @@ app.post('/forgot-password', async (req, res) => {
             { expiresIn: '5m' }
         );
     
-        const link = `http://localhost:${port}/reset-password/${oldUser._id}/${token}`;
+        // Use environment variables for base URL or default to localhost in development
+        const baseURL = process.env.BACKEND_URL || `http://localhost:${port}`;
+        const link = `${baseURL}/reset-password/${oldUser._id}/${token}`;
         console.log("Reset link generated:", link);
         
         // In a production app, you would send an email here
@@ -205,8 +210,9 @@ app.get("/reset-password/:id/:token", async (req, res) => {
         return res.status(404).send("User not found");
     }
     
-    // Redirect to React frontend instead of rendering EJS template
-    res.redirect(`http://localhost:3000/reset-password/${id}/${token}`);
+    // Use frontend URL from environment or default to localhost in development
+    const frontendURL = process.env.FRONTEND_URL || 'http://localhost:3000';
+    res.redirect(`${frontendURL}/reset-password/${id}/${token}`);
 });
 
 app.post("/reset-password/:id/:token", async (req, res) => {
